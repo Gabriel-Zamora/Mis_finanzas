@@ -1,0 +1,272 @@
+function flujos_headers_get() {
+
+  var libro = SpreadsheetApp.getActive();
+  var hflujos = libro.getSheetByName('Flujos');
+  var headers = hflujos.getRange(1,1,1,hflujos.getLastColumn()).getValues()[0];
+  
+  var json = {};
+  
+  for(i = 0; i < headers.length; i++){
+    
+    json[headers[i]] = i;
+    
+  }  
+  
+  return json;
+}
+
+function tarjetas_headers_get() {
+
+  var libro = SpreadsheetApp.getActive();
+  var hflujos = libro.getSheetByName('Tarjeta');
+  var headers = hflujos.getRange(1,1,1,hflujos.getLastColumn()).getValues()[0];
+  
+  var json = {};
+  
+  for(i = 0; i < headers.length; i++){
+    
+    json[headers[i]] = i;
+    
+  }  
+
+  return json;
+}
+
+function rentabilidades_headers_get() {
+
+  var libro = SpreadsheetApp.getActive();
+  var hflujos = libro.getSheetByName('Rentabilidades');
+  var headers = hflujos.getRange(1,1,1,hflujos.getLastColumn()).getValues()[0];
+  
+  var json = {};
+  
+  for(i = 0; i < headers.length; i++){
+    
+    json[headers[i]] = i;
+    
+  }  
+
+  return json;
+}
+
+
+
+function agregar_put() {
+
+  var libro = SpreadsheetApp.getActive();
+  var hresumen = libro.getSheetByName('Resumen');  
+  var rdata = hresumen.getRange('B4:C10').getValues();
+  
+  var json = {};
+  
+  for(i = 0; i < rdata.length; i++){
+    
+    json[rdata[i][0]] = rdata[i][1];
+    
+  }
+
+  return json;
+  
+}
+
+function agregar_vaciar() {
+
+  var libro = SpreadsheetApp.getActive();
+  var hresumen = libro.getSheetByName('Resumen');
+  
+  hresumen.getRange('C5:C6').setValue('');
+  
+}
+
+
+
+function diezmar_put() {
+   
+  var headers = ['Fecha','Glosa'];
+  
+  var libro = SpreadsheetApp.getActive();
+  var hresumen = libro.getSheetByName('Resumen');
+  var rdata = hresumen.getRange('M9:N9').getValues();
+
+  var json = {};
+  
+  for(i = 0; i < headers.length; i++){
+    
+    json[headers[i]] = rdata[0][i];
+    
+  }
+  
+  return json;
+}
+
+
+
+function cambiar_put() {
+   
+  var libro = SpreadsheetApp.getActive();
+  var hresumen = libro.getSheetByName('Resumen');
+  var rdata = hresumen.getRange('B14:D18').getValues();
+  
+  var json = {'Antes':{}, 'Ahora' : {}};
+  
+  for(i = 0; i < rdata.length; i++){
+    
+    json['Antes'][rdata[i][0]] = rdata[i][1];
+    json['Ahora'][rdata[i][0]] = rdata[i][2];
+    
+  }
+
+  return json;
+}
+
+function cambiar_vaciar() {
+
+  var libro = SpreadsheetApp.getActive();
+  var hresumen = libro.getSheetByName('Resumen');
+  
+  hresumen.getRange('C14:C16').setValue('');
+  hresumen.getRange('C18').setValue('Efectivo');
+  
+}
+
+
+
+function agregarcuotas_put() {
+   
+  var libro = SpreadsheetApp.getActive();
+  var hresumen = libro.getSheetByName('Resumen');
+  var rdata = hresumen.getRange('B20:C25').getValues();
+  var jfacturacion = par_fac();
+ 
+  var json = {};
+  
+  for(i = 0; i < rdata.length; i++){
+    
+    json[rdata[i][0]] = rdata[i][1];
+    
+  }
+
+  if(json.Fecha.getUTCDate() < jfacturacion[json.Tarjeta]) {
+    
+    json.mes = json.Fecha.getMonth()+1;
+    json.año = json.Fecha.getUTCFullYear();
+    
+  }
+  
+  else {
+    
+    var date = new Date(json.año = json.Fecha.getUTCFullYear(), json.Fecha.getMonth()+1, 1)
+    
+    json.mes = date.getMonth()+1;
+    json.año = date.getUTCFullYear();
+  
+  }
+  
+  return json;
+  
+}
+
+function agregarcuotas_vaciar() {
+
+  var libro = SpreadsheetApp.getActive();
+  var hresumen = libro.getSheetByName('Resumen');
+  
+  hresumen.getRange('C21:C22').setValue('');
+  hresumen.getRange('C23').setValue(1);
+  
+}
+
+
+
+function pagar_put() {
+   
+  var libro = SpreadsheetApp.getActive();
+  var hresumen = libro.getSheetByName('Resumen');
+  
+  var json = {};
+  
+  json.Fecha = hresumen.getRange('G1').getValue();
+  json.Tarjeta = hresumen.getRange('T5').getValue();
+  json.Monto = hresumen.getRange('T10').getValue();
+  json.Modo = hresumen.getRange('T11').getValue();
+  json.Glosa = 'Tarjeta ' + json.Tarjeta;
+  
+  
+  if(json.Fecha.getUTCDate() <= 4) {
+    
+    json.Plazo = new Date(json.Fecha.getUTCFullYear(),json.Fecha.getMonth(),4);
+    
+  }
+  
+  else {
+    
+    json.Plazo = new Date(json.Fecha.getUTCFullYear(), json.Fecha.getMonth()+1, 4);
+  
+  }
+
+  return json;
+}
+
+function pagar_vaciar() {
+
+  var libro = SpreadsheetApp.getActive();
+  var hresumen = libro.getSheetByName('Resumen');
+  
+  hresumen.getRange('T10').setValue('');
+  hresumen.getRange('T11').setValue('Total');
+  
+}
+
+
+function inversion_put() {
+
+  var libro = SpreadsheetApp.getActive();
+  var hresumen = libro.getSheetByName('Resumen');  
+  var rdata = hresumen.getRange('AC4:AD8').getValues();
+  
+  var json = {};
+  
+  for(i = 0; i < rdata.length; i++){
+    
+    json[rdata[i][0]] = rdata[i][1];
+    
+  }
+
+  return json;
+  
+}
+
+function inversion_vaciar() {
+
+  var libro = SpreadsheetApp.getActive();
+  var hresumen = libro.getSheetByName('Resumen');
+  
+  hresumen.getRange('AD5:AD8').setValue('');
+  
+}
+
+
+
+function distribucion_put() {
+
+  var libro = SpreadsheetApp.getActive();
+  var hcuentas = libro.getSheetByName('Cuentas');
+  
+  var json = {};
+  
+  json.fecha = hcuentas.getRange('C2').getValue();
+  json.hoy = hcuentas.getRange('B1').getValue();  
+  json.Estado = 'Realizado';
+  
+  var ctadata = hcuentas.getRange('B6:B20').getValues();
+  var chkdata = hcuentas.getRange('J6:J20').getValues();
+  
+  for(i = 0; i < ctadata.length; i++){
+    
+    json[ctadata[i][0]] = chkdata[i][0];
+    
+  }
+
+  return json;
+  
+}
