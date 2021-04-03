@@ -20,10 +20,11 @@ En esta hoja, quedan registrados todos los movimientos que se pueden traducir en
 - Etiqueta: Alguna etiqueta asociada a la transacción, util para luego hacer análisis de transacciones
 
 ### Tarjeta
-En esta hoja quedan resgitrados todos los movimientos que se efectuan sobre una tarjeta de crédito separados en cuotas, quedando guardada la fecha de uso, fecha de pago, glosa, cargo, tarjeta, monto, estado y etiqueta de la transacción:
+En esta hoja quedan resgitrados todos los movimientos que se efectuan sobre una tarjeta de crédito separados en cuotas, quedando guardada la fecha de uso, fecha de pago, glosa, cuota, cargo, tarjeta, monto, estado y etiqueta de la transacción:
 - Fecha: Fecha en que se usa o se presupuesta usar tarjeta de crédito
 - Fecha de pago: Fecha en que se paga o se espera pagar la deuda asociada a una cuota
 - Glosa: Nombre asociado al uso de la tarjeta
+- Cuota: Número de cuota
 - Cargo: Monto en pesos cargado a la tarjeta
 - Tarjeta: Tarjeta de crédito a la que se asocia el movimiento, la lista de tarjetas se encuentra en la columna B de la hoja validaciones
 - Monto: Monto de la deuda asociado al uso de la tarjeta de crédito en CLP o USD
@@ -44,4 +45,15 @@ En esta hoja quedan registrados los instrumentos de ahorro o inversión, guardan
 - Estado: Estado del instrumento, realizado (liquidado) o pendiente de liquidar
 
 ## Macros
-Pendiente
+
+### api.gs
+Script que incluye todas las lógicas para agregar movimientos a las distintas hojas transaccionales, cada una de las funciones tienen como entrada un objeto de tipo json con cada uno de los campos que definen una transacción. Está diseñado de forma en que se puedan agregar transacciones desde una aplicación mediante un método post.
+
+### sheet_api.gs
+Script que transforma la información llenada en las celdas que funcionan como formularios de la hoja resumen en objetos con formato json que puedan ser llamados por las funciones contenidas en el archivo api.gs.
+
+### macros
+Macros que están asociadas a los distintos botones presentes en la planilla, permite separar la parte lógica de la planilla con la lectura de los formularios.
+
+### tools.gs
+Script que tiene funciones paramétricas que permiten relacionar cuentas bancarias, a tarjetas de crédito y sus periodos de facturación
