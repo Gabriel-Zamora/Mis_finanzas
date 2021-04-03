@@ -56,4 +56,4 @@ Script que transforma la información llenada en las celdas que funcionan como f
 Macros que están asociadas a los distintos botones presentes en la planilla, permite separar la parte lógica de la planilla con la lectura de los formularios.
 
 ### tools.gs
-Script que tiene funciones paramétricas que permiten relacionar cuentas bancarias, a tarjetas de crédito y sus periodos de facturación
+Script que tiene funciones paramétricas que permiten relacionar cuentas bancarias, tarjetas de crédito y sus periodos de facturación
