@@ -118,6 +118,9 @@ function agregarcuotas_api(json) {
       htarjeta.getRange(ultimafila+1,jtarjeta[headers[j]]+1).setValue(json[headers[j]]);
     
     }
+
+    htarjeta.getRange(ultimafila+1,jtarjeta['Cuota']+1).setValue(json.Cuotas);
+
   
   }
   
@@ -134,6 +137,8 @@ function agregarcuotas_api(json) {
         htarjeta.getRange(ultimafila+i,jtarjeta[headers[j]]+1).setValue(json[headers[j]]);
       
       }
+
+      htarjeta.getRange(ultimafila+i,jtarjeta['Cuota']+1).setValue(i);
       
      }
   
